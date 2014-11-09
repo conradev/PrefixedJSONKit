@@ -2811,7 +2811,7 @@ static int jk_encode_add_atom_to_buffer(JKEncodeState *encodeState, void *object
           for(id keyObject in enumerateObject) {
             if(PJK_EXPECT_T(printComma)) { if(PJK_EXPECT_F(jk_encode_write1(encodeState, 0L, ","))) { return(1); } }
             printComma = 1;
-            void *keyObjectISA = *((void **)keyObject);
+            void *keyObjectISA = (PJK_EXPECT_F(workAroundMacOSXABIBreakingBug)) ? NULL : *((void **)keyObject);
             if(PJK_EXPECT_F((keyObjectISA != encodeState->fastClassLookup.stringClass)) && PJK_EXPECT_F(([keyObject isKindOfClass:[NSString class]] == NO))) { jk_encode_error(encodeState, @"Key must be a string object."); return(1); }
             if(PJK_EXPECT_F(jk_encode_add_atom_to_buffer(encodeState, keyObject)))                                                        { return(1); }
             if(PJK_EXPECT_F(jk_encode_write1(encodeState, 0L, ":")))                                                                      { return(1); }
@@ -2823,7 +2823,7 @@ static int jk_encode_add_atom_to_buffer(JKEncodeState *encodeState, void *object
           for(idx = 0L; idx < dictionaryCount; idx++) {
             if(PJK_EXPECT_T(printComma)) { if(PJK_EXPECT_F(jk_encode_write1(encodeState, 0L, ","))) { return(1); } }
             printComma = 1;
-            void *keyObjectISA = *((void **)keys[idx]);
+            void *keyObjectISA = (PJK_EXPECT_F(workAroundMacOSXABIBreakingBug)) ? NULL : *((void **)keys[idx]);
             if(PJK_EXPECT_F(keyObjectISA != encodeState->fastClassLookup.stringClass) && PJK_EXPECT_F([(id)keys[idx] isKindOfClass:[NSString class]] == NO)) { jk_encode_error(encodeState, @"Key must be a string object."); return(1); }
             if(PJK_EXPECT_F(jk_encode_add_atom_to_buffer(encodeState, keys[idx])))    { return(1); }
             if(PJK_EXPECT_F(jk_encode_write1(encodeState, 0L, ":")))                  { return(1); }
